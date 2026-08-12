@@ -1,0 +1,3 @@
+# __Project Details and Architecture of the Project and project directory structure__
+
+### TO BE UPADTED LATER...
