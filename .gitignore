@@ -68,8 +68,8 @@ venv.bak/
 # Jupyter
 # ==========================================================
 
-.ipynb_checkpoints/
-
+*.ipynb_checkpoints/
+*.ipynb
 
 # ==========================================================
 # Testing / Coverage
