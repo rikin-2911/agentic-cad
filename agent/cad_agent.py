@@ -29,7 +29,9 @@ from langchain_mcp_adapters.tools import load_mcp_tools
 load_dotenv()
 
 groq_api_key = os.getenv("GROQ_API_KEY")
+hf_api_key = os.getenv("HUGGINGFACE_HUB_ACCESS_TOKEN")
 
+"""
 llm = ChatGroq(
     model="openai/gpt-oss-120b",
     temperature=0.5,
@@ -37,15 +39,15 @@ llm = ChatGroq(
     api_key=groq_api_key,
 )
 """
-nemotron_llm = HuggingFaceEndpoint(
-    repo_id="nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+
+llm = HuggingFaceEndpoint(
+    repo_id="Qwen/Qwen3.8-27B",
     task="text-generation",
     huggingfacehub_api_token=hf_api_key,
-    max_new_tokens=1024
+    max_new_tokens=500
 )
 
-llm = ChatHuggingFace(llm=nemotron_llm)
-"""
+llm = ChatHuggingFace(llm=llm)
 
 # ==================
 # MCP Client
@@ -176,7 +178,7 @@ async def main():
         cad_agent = await build_graph(tools)
 
         result = await cad_agent.ainvoke({"messages": [HumanMessage(content="You are expert Sr. CAD Design Engineer with 15+ years of experience in designing, draw the figures given in the task with the correct dimensions and take care of the geometry. " \
-        "Task:Make a cube of 100mm of length, width, and height and then a make a fillet to all the sides of the box. ")]})
+        "Task:Make a cube of 100mm of length, width, and height. Export it to STEP file/model")]})
 
         for message in result["messages"]:
             print("\n =============== ")
