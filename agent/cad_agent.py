@@ -23,6 +23,8 @@ import asyncio
 from langchain_mcp_adapters.client import MultiServerMCPClient 
 from langchain_mcp_adapters.tools import load_mcp_tools
 
+from prompt import prompt
+
 # ==================
 # step - 2 LLM Initialisation
 # ==================
@@ -97,8 +99,10 @@ tool_node = ToolNode(tools)  # Already Async i.e., ToolNode Class
 # ASYNC GRAPH -> using function
 async def build_graph(tools):
 
+    # binding the mcp tools with llm
     llm_with_tools = llm.bind_tools(tools)
 
+    # agent node for llm responses
     async def agent_node(state: CadAgentState):
         response = await llm_with_tools.ainvoke(
             state["messages"]
@@ -108,10 +112,12 @@ async def build_graph(tools):
             "messages": [response]
         }
 
+    # tool node 
     tool_node = ToolNode(tools)
 
+    # graph building
     graph = StateGraph(CadAgentState)
-
+    
     graph.add_node("agent_node", agent_node)
     graph.add_node("tools", tool_node)
 
